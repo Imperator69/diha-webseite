@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Download, Trash2 } from "lucide-react";
@@ -9,7 +10,18 @@ import { formatDate } from "@/lib/i18n/format";
 import { docKindLabels, label } from "@/lib/i18n/labels";
 import { translator } from "@/lib/i18n/t";
 
-export type ListedDoc = { id: string; kind: string; title: string; fileName: string; validUntil: string | null; status: string; scope: string; canDelete: boolean };
+export type ListedDoc = {
+  id: string;
+  kind: string;
+  title: string;
+  fileName: string;
+  validUntil: string | null;
+  status: string;
+  scope: string;
+  canDelete: boolean;
+  /** Bezug (Buchung, Projekt, Genehmigung, Zone) für die Gesamtliste */
+  context?: { label: string; href?: string };
+};
 
 export function DocList({ locale, docs, canReview }: { locale: Locale; docs: ListedDoc[]; canReview: boolean }) {
   const t = translator(locale);
@@ -43,7 +55,16 @@ export function DocList({ locale, docs, canReview }: { locale: Locale; docs: Lis
               <p className="text-xs text-fg-muted">
                 {label(docKindLabels, d.kind, locale)}
                 {d.validUntil && ` · ${t("gültig bis", "valid until")} ${formatDate(d.validUntil, locale)}`}
-                {d.scope === "project" && ` · ${t("Projektunterlage", "project document")}`}
+                {d.scope === "project" && !d.context && ` · ${t("Projektunterlage", "project document")}`}
+                {d.context && " · "}
+                {d.context &&
+                  (d.context.href ? (
+                    <Link href={d.context.href} className="hover:underline">
+                      {d.context.label}
+                    </Link>
+                  ) : (
+                    d.context.label
+                  ))}
               </p>
             </div>
             {expired ? (

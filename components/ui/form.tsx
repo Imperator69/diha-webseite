@@ -13,8 +13,11 @@ export function Textarea({ className, ...props }: ComponentProps<"textarea">) {
 }
 
 export function Select({ className, children, ...props }: ComponentProps<"select">) {
+  // React übernimmt ein geändertes defaultValue bei <select> nicht. Ohne neuen Key würde das
+  // Formular nach dem Speichern (automatischer Reset) auf den Wert beim ersten Rendern zurückspringen.
+  const key = props.defaultValue !== undefined ? JSON.stringify(props.defaultValue) : undefined;
   return (
-    <select className={clsx(control, "h-10 pr-8", className)} {...props}>
+    <select key={key} className={clsx(control, "h-10 pr-8", className)} {...props}>
       {children}
     </select>
   );

@@ -4,6 +4,7 @@ import type { Viewer } from "@/lib/auth/current";
 import { isStaff } from "@/lib/auth/rbac";
 import { db, schema } from "@/lib/db";
 import type { Locale } from "@/lib/i18n/config";
+import { getSetting } from "@/lib/settings";
 import { mapBaseImageUrl, toMapZone } from "@/lib/site-data/zones";
 import { loadAvailableDocs, loadCatalog, loadOccupancy, type BookingFull } from "./data";
 
@@ -11,11 +12,11 @@ import { loadAvailableDocs, loadCatalog, loadOccupancy, type BookingFull } from 
 export async function buildWizardData(viewer: Viewer, locale: Locale, opts: { booking?: BookingFull | null; projectId?: string | null }): Promise<WizardData> {
   const staff = isStaff(viewer.role);
   const nowMs = Date.now();
-  const [catalog, occupancy, baseImageUrl, settingsRow] = await Promise.all([
+  const [catalog, occupancy, baseImageUrl, bookingSettings] = await Promise.all([
     loadCatalog(),
     loadOccupancy(nowMs - 86_400_000, nowMs + 400 * 86_400_000, opts.booking?.booking.id),
     mapBaseImageUrl(),
-    db().select().from(schema.settings).where(eq(schema.settings.key, "booking")).limit(1),
+    getSetting("booking"),
   ]);
   const projectRows = staff
     ? await db().select({ id: schema.projects.id, name: schema.projects.name }).from(schema.projects).where(eq(schema.projects.status, "active")).orderBy(asc(schema.projects.name))
@@ -30,7 +31,6 @@ export async function buildWizardData(viewer: Viewer, locale: Locale, opts: { bo
   const relevantProjects = opts.booking ? [opts.booking.booking.projectId] : projectRows.map((p) => p.id).slice(0, 25);
   for (const pid of relevantProjects) docsByProject[pid] = (await loadAvailableDocs(pid)).filter((d) => d.scope === "project");
   const bookingDocs = opts.booking ? (await loadAvailableDocs(opts.booking.booking.projectId, opts.booking.booking.id)).filter((d) => d.scope === "booking") : [];
-  const guestThreshold = Number((settingsRow[0]?.value as { guestThreshold?: number } | undefined)?.guestThreshold ?? 10);
 
   return {
     activities: catalog.activities,
@@ -45,7 +45,7 @@ export async function buildWizardData(viewer: Viewer, locale: Locale, opts: { bo
     nowMs,
     staff,
     leadTimeOverride: Boolean(opts.booking?.booking.leadTimeOverride),
-    guestThreshold,
+    guestThreshold: bookingSettings.guestThreshold,
     baseImageUrl,
   };
 }

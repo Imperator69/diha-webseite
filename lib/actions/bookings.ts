@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { audit } from "@/lib/audit";
+import { getSetting } from "@/lib/settings";
 import { assertViewer, type Viewer } from "@/lib/auth/current";
 import { isStaff } from "@/lib/auth/rbac";
 import { canSeeBooking, loadAvailableDocs, loadBooking, loadCatalog, loadOccupancy, nextCounter, projectMemberEmails, staffEmails } from "@/lib/bookings/data";
@@ -104,7 +105,7 @@ export async function saveBookingAction(input: BookingPayload): Promise<BookingS
     const docs = await loadAvailableDocs(p.projectId, existing?.id);
     const evaluation = evaluateBooking(
       { activityCodes: p.activityCodes, zoneIds: p.zoneIds, periods, persons: p.persons, docs, details: p.details, participantsCount: p.participantsCount, guestsCount: p.guestsCount },
-      { activities: catalog.activities, zones: catalog.zones, ...occupancy, nowMs: Date.now(), enforceLeadTime: !isStaff(viewer.role) && !existing?.leadTimeOverride },
+      { activities: catalog.activities, zones: catalog.zones, ...occupancy, nowMs: Date.now(), enforceLeadTime: !isStaff(viewer.role) && !existing?.leadTimeOverride, guestThreshold: (await getSetting("booking")).guestThreshold },
     );
     // Fehlende Unterlagen werden nach dem Speichern im Entwurf hochgeladen; alles andere blockiert sofort.
     const blocking = evaluation.issues.filter((i) => i.severity === "error");
@@ -234,7 +235,7 @@ export async function reviewStatusAction(fd: FormData): Promise<void> {
     const docs = await loadAvailableDocs(booking.projectId, booking.id);
     const evaluation = evaluateBooking(
       { activityCodes: full.activityCodes, zoneIds: full.zoneIds, periods: full.periods, persons: full.persons, docs, details: booking.details, participantsCount: booking.participantsCount, guestsCount: booking.guestsCount },
-      { activities: catalog.activities, zones: catalog.zones, ...occupancy, nowMs: Date.now(), enforceLeadTime: false },
+      { activities: catalog.activities, zones: catalog.zones, ...occupancy, nowMs: Date.now(), enforceLeadTime: false, guestThreshold: (await getSetting("booking")).guestThreshold },
     );
     if (!evaluation.ok) backTo(fd, booking.id, "?error=rules");
     const done = new Set(full.checks.filter((c) => c.doneAt).map((c) => c.key));
@@ -244,7 +245,7 @@ export async function reviewStatusAction(fd: FormData): Promise<void> {
   if (target === "completed") {
     if ((booking.firstStart ?? 0) > Date.now()) backTo(fd, booking.id, "?error=not_started");
     const catalog = await loadCatalog();
-    const req = requirementsFor({ activityCodes: full.activityCodes, details: booking.details, guestsCount: booking.guestsCount }, catalog.activities);
+    const req = requirementsFor({ activityCodes: full.activityCodes, details: booking.details, guestsCount: booking.guestsCount }, catalog.activities, (await getSetting("booking")).guestThreshold);
     if (req.requiresSiteClearance && !booking.siteClearedAt) backTo(fd, booking.id, "?error=clearance");
   }
   const extra: Partial<typeof schema.bookings.$inferInsert> = {};

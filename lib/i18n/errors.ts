@@ -17,6 +17,9 @@ const messages: Record<string, { de: string; en: string }> = {
   not_found: { de: "Eintrag nicht gefunden.", en: "Entry not found." },
   conflict: { de: "Der Eintrag wurde zwischenzeitlich geändert.", en: "The entry was changed in the meantime." },
   file: { de: "Datei fehlt, ist zu groß (max. 25 MB) oder hat ein nicht erlaubtes Format.", en: "File missing, too large (max. 25 MB) or of a disallowed type." },
+  iban: { de: "Die IBAN ist ungültig (Prüfziffer).", en: "The IBAN is invalid (check digits)." },
+  bic: { de: "Der BIC ist ungültig.", en: "The BIC is invalid." },
+  vat_id: { de: "Die UID-Nummer hat kein gültiges Format.", en: "The VAT ID has an invalid format." },
   server: { de: "Unerwarteter Fehler. Bitte erneut versuchen.", en: "Unexpected error. Please try again." },
 };
 
