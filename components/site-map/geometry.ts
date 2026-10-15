@@ -38,12 +38,11 @@ export function bbox(points: Pt[]): Box {
 export function focusBox(points: Pt[], padding = 0.35): Box {
   const b = bbox(points);
   const ratio = MAP_W / MAP_H;
-  let w = b.w * (1 + padding * 2);
-  let h = b.h * (1 + padding * 2);
-  if (w / h > ratio) h = w / ratio;
-  else w = h * ratio;
-  w = Math.max(w, 260);
-  h = w / ratio;
+  const padW = b.w * (1 + padding * 2);
+  const padH = b.h * (1 + padding * 2);
+  // Seitenverhältnis der Karte beibehalten, Mindestbreite gegen zu starkes Zoomen
+  const w = Math.max(padW / padH > ratio ? padW : padH * ratio, 260);
+  const h = w / ratio;
   const cx = b.x + b.w / 2;
   const cy = b.y + b.h / 2;
   const x = Math.min(Math.max(cx - w / 2, 0), MAP_W - w);
