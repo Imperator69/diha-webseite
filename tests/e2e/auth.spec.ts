@@ -15,7 +15,7 @@ test.describe.serial("Zugang, Rollen und 2FA", () => {
     await page.goto("/de/portal/login"); // legt INITIAL_ADMINS als eingeladen an
     const link = cliInvite("lerch@gl-ventures.at", ["--name", "Dominik Lerch"]);
     adminSecret = await acceptInvite(page, link, "Dominik Lerch", true);
-    await expect(page.getByRole("heading", { name: /Willkommen/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Guten Tag|Willkommen/ })).toBeVisible();
   });
 
   test("Falsches Passwort wird abgelehnt", async ({ page }) => {

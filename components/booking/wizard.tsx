@@ -164,10 +164,10 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
                   aria-current={active ? "step" : undefined}
                   className={clsx(
                     "flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold ring-1 transition-colors",
-                    active ? "bg-ink text-white ring-ink" : "bg-card ring-border hover:bg-bg-subtle",
+                    active ? "bg-fg text-bg ring-fg" : "bg-card ring-border hover:bg-bg-subtle",
                   )}
                 >
-                  <span className={clsx("flex size-5 items-center justify-center rounded-full text-[10px]", active ? "bg-signal" : hasErrors && i < stepIndex ? "bg-danger/15 text-danger" : "bg-bg-subtle")}>
+                  <span className={clsx("flex size-5 items-center justify-center rounded-full text-[10px]", active ? "bg-signal text-white" : hasErrors && i < stepIndex ? "bg-danger/15 text-danger" : "bg-bg-subtle")}>
                     {i + 1}
                   </span>
                   {locale === "en" ? s.en : s.de}

@@ -84,7 +84,7 @@ export default async function BookingsPage({ params, searchParams }: PageProps) 
             <Link
               key={key}
               href={`/${locale}/portal/buchungen?g=${key}${projectFilter ? `&project=${projectFilter}` : ""}`}
-              className={`rounded-full px-3 py-1 ring-1 ${group === key ? "bg-ink text-white ring-ink" : "ring-border hover:bg-bg-subtle"}`}
+              className={`rounded-full px-3 py-1 ring-1 ${group === key ? "bg-fg text-bg ring-fg" : "ring-border hover:bg-bg-subtle"}`}
             >
               {text}
             </Link>

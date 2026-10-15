@@ -74,7 +74,7 @@ export default async function InvoicesPage({ params, searchParams }: PageProps) 
     paid: t("bezahlt", "paid"),
     cancelled: t("storniert", "cancelled"),
   };
-  const chip = (active: boolean) => clsx("rounded-full px-3 py-1 ring-1", active ? "bg-ink text-white ring-ink" : "ring-border hover:bg-bg-subtle");
+  const chip = (active: boolean) => clsx("rounded-full px-3 py-1 ring-1", active ? "bg-fg text-bg ring-fg" : "ring-border hover:bg-bg-subtle");
   const href = (f?: string) => `/${locale}/portal/rechnungen${f ? `?filter=${f}` : ""}`;
 
   return (

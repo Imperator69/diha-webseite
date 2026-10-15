@@ -79,5 +79,18 @@ test.describe.serial("Rechnungen: Entwurf, Pflichtangaben, Ausstellen, Zahlung, 
     await expect(page.getByText("Noch zu erstatten: € 1.080,00")).toBeVisible();
     await page.getByRole("button", { name: "Erstattung erfassen" }).click();
     await expect(page.getByText("Vollständig ausgeglichen")).toBeVisible();
+
+    // Auswertungen und CSV-Export
+    await page.goto("/de/portal/auswertungen?period=ytd");
+    await expect(page.getByRole("heading", { name: "Auslastung je Zone" })).toBeVisible();
+    await expect(page.getByRole("grid", { name: "Auslastung je Zone und Monat" })).toBeVisible();
+    const csv = await page.request.get("/api/reports/invoices?period=ytd&locale=de");
+    expect(csv.status()).toBe(200);
+    const text = await csv.text();
+    expect(text).toMatch(/^\ufeffNummer;Art;Status/);
+    expect(text).toMatch(/DIHA-\d{4}-0001;Rechnung;Storniert;Kunde Gamma/);
+    expect(text).toMatch(/DIHA-\d{4}-0002;Gutschrift/);
+    await page.goto("/de/portal");
+    await expect(page.getByText("Fristen und Hinweise").first()).toBeVisible();
   });
 });

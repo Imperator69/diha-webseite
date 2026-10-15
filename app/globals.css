@@ -37,18 +37,6 @@
   --color-graphite: #595959;
   --color-graphite-2: #7f7f7f;
 
-  /* Semantische Tokens für das Portal (hell/dunkel) */
-  --color-bg: var(--bg);
-  --color-bg-subtle: var(--bg-subtle);
-  --color-card: var(--card);
-  --color-fg: var(--fg);
-  --color-fg-muted: var(--fg-muted);
-  --color-border: var(--border);
-  --color-ring: var(--ring);
-  --color-ok: var(--ok);
-  --color-warn: var(--warn);
-  --color-danger: var(--danger);
-  --color-info: var(--info);
 
   --animate-fade-up: fade-up 0.6s ease-out both;
 
@@ -64,6 +52,22 @@
   }
 }
 
+/* Semantische Tokens für das Portal (hell/dunkel). „inline“, damit die Utilities
+   var(--bg) usw. direkt verwenden und die Überschreibung im Portal-Bereich greift. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-card: var(--card);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+}
+
 :root {
   --bg: #f6f5f2;
   --bg-subtle: #eeece7;
@@ -76,6 +80,24 @@
   --warn: #a35c00;
   --danger: #c8102e;
   --info: #1f3864;
+  --viz-1: #2a78d6;
+  --viz-2: #eb6834;
+  --viz-3: #1baf7a;
+  --viz-muted: #b9b7b0;
+  --viz-grid: #ebe9e3;
+  --viz-axis: #c9c6bd;
+  --viz-seq-1: #cde2fb;
+  --viz-seq-2: #9ec5f4;
+  --viz-seq-3: #6da7ec;
+  --viz-seq-4: #3987e5;
+  --viz-seq-5: #256abf;
+  --viz-seq-6: #184f95;
+  --viz-seq-ink-1: #12161c;
+  --viz-seq-ink-2: #12161c;
+  --viz-seq-ink-3: #12161c;
+  --viz-seq-ink-4: #ffffff;
+  --viz-seq-ink-5: #ffffff;
+  --viz-seq-ink-6: #ffffff;
   color-scheme: light;
 }
 
@@ -93,12 +115,48 @@
       --warn: #f0a640;
       --danger: #ff5a6e;
       --info: #8fa6d6;
+      --viz-1: #3987e5;
+      --viz-2: #d95926;
+      --viz-3: #199e70;
+      --viz-muted: #4a5360;
+      --viz-grid: #232a34;
+      --viz-axis: #3a4552;
+      --viz-seq-1: #13355f;
+      --viz-seq-2: #184f95;
+      --viz-seq-3: #256abf;
+      --viz-seq-4: #3987e5;
+      --viz-seq-5: #6da7ec;
+      --viz-seq-6: #9ec5f4;
+      --viz-seq-ink-1: #e8eaed;
+      --viz-seq-ink-2: #e8eaed;
+      --viz-seq-ink-3: #ffffff;
+      --viz-seq-ink-4: #0e1116;
+      --viz-seq-ink-5: #0e1116;
+      --viz-seq-ink-6: #0e1116;
       color-scheme: dark;
     }
   }
 }
 
 [data-area="portal"][data-theme="dark"] {
+  --viz-1: #3987e5;
+  --viz-2: #d95926;
+  --viz-3: #199e70;
+  --viz-muted: #4a5360;
+  --viz-grid: #232a34;
+  --viz-axis: #3a4552;
+  --viz-seq-1: #13355f;
+  --viz-seq-2: #184f95;
+  --viz-seq-3: #256abf;
+  --viz-seq-4: #3987e5;
+  --viz-seq-5: #6da7ec;
+  --viz-seq-6: #9ec5f4;
+  --viz-seq-ink-1: #e8eaed;
+  --viz-seq-ink-2: #e8eaed;
+  --viz-seq-ink-3: #ffffff;
+  --viz-seq-ink-4: #0e1116;
+  --viz-seq-ink-5: #0e1116;
+  --viz-seq-ink-6: #0e1116;
   --bg: #0e1116;
   --bg-subtle: #151a21;
   --card: #171c24;

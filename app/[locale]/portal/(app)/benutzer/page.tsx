@@ -45,7 +45,7 @@ export default async function UsersPage({ params, searchParams }: PageProps) {
           <Link
             key={r ?? "all"}
             href={`/${locale}/portal/benutzer${r ? `?role=${r}` : ""}`}
-            className={`rounded-full px-3 py-1 ring-1 ${role === r ? "bg-ink text-white ring-ink" : "ring-border hover:bg-bg-subtle"}`}
+            className={`rounded-full px-3 py-1 ring-1 ${role === r ? "bg-fg text-bg ring-fg" : "ring-border hover:bg-bg-subtle"}`}
           >
             {r ? label(roleLabels, r, locale) : t("Alle", "All")}
           </Link>

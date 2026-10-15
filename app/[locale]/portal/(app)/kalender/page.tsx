@@ -83,10 +83,10 @@ export default async function CalendarPage({ params, searchParams }: PageProps) 
         description={staff ? t("Alle Buchungen und Sperrzeiten am Gelände.", "All bookings and blackouts on site.") : t("Ihre Buchungen und Sperrzeiten am Gelände.", "Your bookings and site blackouts.")}
         actions={
           <div className="inline-flex rounded-lg p-0.5 text-sm ring-1 ring-border">
-            <Link href={`${base}?month=${month}`} className={clsx("rounded-md px-3 py-1", view === "month" ? "bg-ink text-white" : "text-fg-muted")}>
+            <Link href={`${base}?month=${month}`} className={clsx("rounded-md px-3 py-1", view === "month" ? "bg-fg text-bg" : "text-fg-muted")}>
               {t("Monat", "Month")}
             </Link>
-            <Link href={`${base}?view=zones&week=${weekStart}`} className={clsx("rounded-md px-3 py-1", view === "zones" ? "bg-ink text-white" : "text-fg-muted")}>
+            <Link href={`${base}?view=zones&week=${weekStart}`} className={clsx("rounded-md px-3 py-1", view === "zones" ? "bg-fg text-bg" : "text-fg-muted")}>
               {t("Zonen je Woche", "Zones by week")}
             </Link>
           </div>

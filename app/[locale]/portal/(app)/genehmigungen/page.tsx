@@ -91,11 +91,11 @@ export default async function PermitsPage({ params, searchParams }: PageProps) {
       ) : (
         <>
           <div className="mb-3 flex flex-wrap gap-2 text-xs">
-            <Link href={`/${locale}/portal/genehmigungen`} className={`rounded-full px-3 py-1 ring-1 ${!authority ? "bg-ink text-white ring-ink" : "ring-border"}`}>
+            <Link href={`/${locale}/portal/genehmigungen`} className={`rounded-full px-3 py-1 ring-1 ${!authority ? "bg-fg text-bg ring-fg" : "ring-border"}`}>
               {t("Alle Stellen", "All bodies")}
             </Link>
             {[...new Set(rows.map((r) => r.p.authority))].map((a) => (
-              <Link key={a} href={`/${locale}/portal/genehmigungen?authority=${a}`} className={`rounded-full px-3 py-1 ring-1 ${authority === a ? "bg-ink text-white ring-ink" : "ring-border"}`}>
+              <Link key={a} href={`/${locale}/portal/genehmigungen?authority=${a}`} className={`rounded-full px-3 py-1 ring-1 ${authority === a ? "bg-fg text-bg ring-fg" : "ring-border"}`}>
                 {label(authorityLabels, a, locale)}
               </Link>
             ))}

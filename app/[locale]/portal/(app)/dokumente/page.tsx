@@ -150,7 +150,7 @@ export default async function DocumentsPage({ params, searchParams }: PageProps)
     expiring: `${t("läuft in 60 Tagen ab", "expires within 60 days")} (${counts.expiring})`,
     expired: `${t("abgelaufen", "expired")} (${counts.expired})`,
   };
-  const chip = (active: boolean) => clsx("rounded-full px-3 py-1 ring-1", active ? "bg-ink text-white ring-ink" : "ring-border hover:bg-bg-subtle");
+  const chip = (active: boolean) => clsx("rounded-full px-3 py-1 ring-1", active ? "bg-fg text-bg ring-fg" : "ring-border hover:bg-bg-subtle");
 
   return (
     <>
