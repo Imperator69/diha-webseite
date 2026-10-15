@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" role="img" aria-labelledby="t">
+  <title id="t">DIHA – Drone Innovation Hub Austria – a company by AEEG</title>
+  <rect x="0" y="4" width="7" height="112" fill="#c8102e"/>
+  <text x="22" y="58" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="60" letter-spacing="1" fill="#0c0f13">DIH<tspan fill="#c8102e">A</tspan></text>
+  <text x="23" y="86" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-weight="500" font-size="16.5" fill="#595959">Drone Innovation Hub Austria</text>
+  <text x="23" y="108" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-weight="400" font-size="12.5" letter-spacing="0.6" fill="#7f7f7f">a company by AEEG</text>
+</svg>

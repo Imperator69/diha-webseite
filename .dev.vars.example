@@ -1,0 +1,8 @@
+# Lokale Secrets für `pnpm dev` / `pnpm start`. Kopieren nach .dev.vars
+# Mindestens 32 zufällige Zeichen, z. B. `openssl rand -base64 48`
+APP_SECRET=change-me-to-a-long-random-string-0123456789
+# Optional: ohne Key werden E-Mails nur im Postausgang (Admin) abgelegt
+RESEND_API_KEY=
+# Schützt /api/cron (manueller Auslöser der Tagesjobs)
+CRON_SECRET=change-me
+SITE_URL=http://localhost:5173

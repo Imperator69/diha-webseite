@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+/* Inter (SIL OFL 1.1), selbst gehostet: keine Requests an Drittanbieter */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* DIHA-Markenfarben (aus den Unterlagen: Signalrot, Navy, Grautöne) */
+  --color-signal: #c8102e;
+  --color-signal-600: #a80d26;
+  --color-signal-50: #fbecee;
+  --color-navy: #1f3864;
+  --color-navy-600: #172a4b;
+  --color-navy-50: #e9edf5;
+  --color-ink: #0c0f13;
+  --color-ink-2: #151a21;
+  --color-ink-3: #1f2630;
+  --color-ink-4: #2b3440;
+  --color-stone: #f4f2ee;
+  --color-stone-2: #e9e5dd;
+  --color-graphite: #595959;
+  --color-graphite-2: #7f7f7f;
+
+  /* Semantische Tokens für das Portal (hell/dunkel) */
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-card: var(--card);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  --animate-fade-up: fade-up 0.6s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+:root {
+  --bg: #f6f5f2;
+  --bg-subtle: #eeece7;
+  --card: #ffffff;
+  --fg: #12161c;
+  --fg-muted: #5b6168;
+  --border: #dedad2;
+  --ring: #1f3864;
+  --ok: #1d7a46;
+  --warn: #a35c00;
+  --danger: #c8102e;
+  --info: #1f3864;
+  color-scheme: light;
+}
+
+[data-area="portal"] {
+  @media (prefers-color-scheme: dark) {
+    &:not([data-theme="light"]) {
+      --bg: #0e1116;
+      --bg-subtle: #151a21;
+      --card: #171c24;
+      --fg: #e8eaed;
+      --fg-muted: #9aa1aa;
+      --border: #2b3440;
+      --ring: #8fa6d6;
+      --ok: #4cc287;
+      --warn: #f0a640;
+      --danger: #ff5a6e;
+      --info: #8fa6d6;
+      color-scheme: dark;
+    }
+  }
+}
+
+[data-area="portal"][data-theme="dark"] {
+  --bg: #0e1116;
+  --bg-subtle: #151a21;
+  --card: #171c24;
+  --fg: #e8eaed;
+  --fg-muted: #9aa1aa;
+  --border: #2b3440;
+  --ring: #8fa6d6;
+  --ok: #4cc287;
+  --warn: #f0a640;
+  --danger: #ff5a6e;
+  --info: #8fa6d6;
+  color-scheme: dark;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-signal);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Höhenlinien-Muster für dunkle Flächen */
+.bg-contours {
+  background-color: var(--color-ink);
+  background-image: url("/brand/contours.svg");
+  background-size: 1400px auto;
+  background-position: center top;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
