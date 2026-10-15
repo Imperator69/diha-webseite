@@ -10,6 +10,7 @@ import { formatDateTime } from "@/lib/i18n/format";
 import { blockReasonLabels, label } from "@/lib/i18n/labels";
 import { translator } from "@/lib/i18n/t";
 import { localeParam, sp, type PageProps } from "@/lib/portal/params";
+import { nowMs } from "@/lib/time";
 
 export default async function BlocksPage({ params, searchParams }: PageProps) {
   const locale = await localeParam(params);
@@ -21,7 +22,7 @@ export default async function BlocksPage({ params, searchParams }: PageProps) {
   const blocks = await db()
     .select()
     .from(schema.siteBlocks)
-    .where(gte(schema.siteBlocks.endsAt, Date.now() - 30 * 86_400_000))
+    .where(gte(schema.siteBlocks.endsAt, nowMs() - 30 * 86_400_000))
     .orderBy(desc(schema.siteBlocks.startsAt));
   return (
     <>
@@ -53,7 +54,7 @@ export default async function BlocksPage({ params, searchParams }: PageProps) {
               <tbody>
                 {blocks.map((b) => {
                   const zone = b.zoneId ? zoneById.get(b.zoneId) : null;
-                  const past = b.endsAt < Date.now();
+                  const past = b.endsAt < nowMs();
                   return (
                     <tr key={b.id} className={past ? "opacity-50" : undefined}>
                       <Td className="text-sm">

@@ -96,3 +96,8 @@ export function isValidTime(value: string): boolean {
 export function overlaps(aStart: number, aEnd: number, bStart: number, bEnd: number): boolean {
   return aStart < bEnd && bStart < aEnd;
 }
+
+/** Aktueller Zeitpunkt; in Server-Komponenten statt Date.now() verwenden (Lint-Regel react-hooks/purity). */
+export function nowMs(): number {
+  return Date.now();
+}
