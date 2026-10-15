@@ -39,7 +39,9 @@ export default async function PortalLayout({ children, params }: { children: Rea
   );
   return (
     <div data-area="portal" className="min-h-screen bg-bg text-fg lg:grid lg:grid-cols-[256px_minmax(0,1fr)]">
-      <aside className="sticky top-0 hidden h-screen overflow-y-auto bg-ink px-3 py-6 lg:block">{sidebar}</aside>
+      <div className="hidden bg-ink lg:block">
+        <aside className="sticky top-0 h-screen overflow-y-auto px-3 py-6">{sidebar}</aside>
+      </div>
       <div className="flex min-w-0 flex-col">
         <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur sm:px-6">
           <details className="relative lg:hidden">

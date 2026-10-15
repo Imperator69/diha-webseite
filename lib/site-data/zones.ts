@@ -39,3 +39,9 @@ export async function mapBaseImageUrl(): Promise<string | null> {
     return null;
   }
 }
+
+/** Alle aktiven Zonen für angemeldete Benutzer (inkl. nicht öffentlicher). */
+export async function portalZones(locale: Locale): Promise<{ map: MapZone[]; rows: ZoneRow[] }> {
+  const rows = await db().select().from(schema.zones).orderBy(asc(schema.zones.sortOrder));
+  return { rows, map: rows.filter((z) => z.active).map((z) => toMapZone(z, locale)) };
+}
