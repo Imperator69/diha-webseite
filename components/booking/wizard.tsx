@@ -69,7 +69,7 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
   const set = <K extends keyof WizardState>(key: K, value: WizardState[K]) => setState((s) => ({ ...s, [key]: value }));
   const selectedActivities = data.activities.filter((a) => state.activityCodes.includes(a.code));
   const requirements = useMemo(() => requirementsFor(state, data.activities, data.guestThreshold), [state, data.activities, data.guestThreshold]);
-  const docs = [...(data.docsByProject[state.projectId] ?? []), ...data.bookingDocs];
+  const docs = useMemo(() => [...(data.docsByProject[state.projectId] ?? []), ...data.bookingDocs], [data.docsByProject, data.bookingDocs, state.projectId]);
 
   const evaluation = useMemo(
     () =>
@@ -148,18 +148,6 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
       setError(res.error ?? "server");
     });
   }
-
-  const IssueList = ({ issues }: { issues: Issue[] }) =>
-    issues.length ? (
-      <ul className="space-y-1.5">
-        {issues.map((i, n) => (
-          <li key={`${i.code}-${n}`} className={clsx("flex items-start gap-2 text-sm", i.severity === "error" ? "text-danger" : "text-warn")}>
-            {i.severity === "error" ? <CircleAlert className="mt-0.5 size-4 shrink-0" /> : <AlertTriangle className="mt-0.5 size-4 shrink-0" />}
-            {issueText(i, locale, data.activities)}
-          </li>
-        ))}
-      </ul>
-    ) : null;
 
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -247,7 +235,7 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
                 disabledIds={data.zones.filter((z) => !compatibleZoneIds.includes(z.id)).map((z) => z.id)}
                 onToggle={(id) => set("zoneIds", state.zoneIds.includes(id) ? state.zoneIds.filter((z) => z !== id) : [...state.zoneIds, id])}
               />
-              <IssueList issues={issuesFor("area")} />
+              <IssueList locale={locale} activities={data.activities} issues={issuesFor("area")} />
             </div>
           )}
 
@@ -259,7 +247,7 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
               />
               {state.zoneIds.length === 0 && <Alert tone="warn">{t("Bitte zuerst einen Bereich wählen.", "Please choose an area first.")}</Alert>}
               <WeekPicker locale={locale} data={data} zoneIds={state.zoneIds} activityCodes={state.activityCodes} leadDays={requirements.leadDays} periods={state.periods} onChange={(p) => set("periods", p)} />
-              <IssueList issues={issuesFor("time")} />
+              <IssueList locale={locale} activities={data.activities} issues={issuesFor("time")} />
             </div>
           )}
 
@@ -321,7 +309,7 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
               <Field label={t("Hinweise für DIHA", "Notes for DIHA")} htmlFor="notes">
                 <Textarea id="notes" value={state.notesProject} onChange={(e) => set("notesProject", e.target.value)} />
               </Field>
-              <IssueList issues={issuesFor("details")} />
+              <IssueList locale={locale} activities={data.activities} issues={issuesFor("details")} />
             </div>
           )}
 
@@ -344,7 +332,7 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
                 {requirements.roles.length === 0 && <p className="text-sm text-fg-muted">{t("Bitte zuerst Nutzungsarten wählen.", "Please choose types of use first.")}</p>}
               </div>
               <ParticipantsEditor locale={locale} state={state} threshold={data.guestThreshold} onChange={(participants) => set("participants", participants)} />
-              <IssueList issues={issuesFor("persons")} />
+              <IssueList locale={locale} activities={data.activities} issues={issuesFor("persons")} />
             </div>
           )}
 
@@ -387,7 +375,7 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
                   {requirements.docs.length === 0 && <p className="text-sm text-fg-muted">{t("Für die gewählten Nutzungsarten sind keine Unterlagen vorgeschrieben.", "No documents are required for the selected types of use.")}</p>}
                 </ul>
               )}
-              <IssueList issues={issuesFor("docs")} />
+              <IssueList locale={locale} activities={data.activities} issues={issuesFor("docs")} />
             </div>
           )}
 
@@ -404,7 +392,7 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
               ) : (
                 <Alert tone="warn">{t("Noch offen:", "Still open:")}</Alert>
               )}
-              <IssueList issues={serverIssues ?? evaluation.issues} />
+              <IssueList locale={locale} activities={data.activities} issues={serverIssues ?? evaluation.issues} />
               <div className="rounded-xl bg-bg-subtle p-4 text-sm">
                 <p className="font-semibold">{t("Kostenschätzung (netto)", "Cost estimate (net)")}</p>
                 {estimateTotal > 0 ? (
@@ -504,6 +492,20 @@ export function BookingWizard({ locale, data, initial, initialStep }: { locale: 
         </p>
       </aside>
     </div>
+  );
+}
+
+function IssueList({ issues, locale, activities }: { issues: Issue[]; locale: Locale; activities: WizardData["activities"] }) {
+  if (!issues.length) return null;
+  return (
+    <ul className="space-y-1.5">
+      {issues.map((i, n) => (
+        <li key={`${i.code}-${n}`} className={clsx("flex items-start gap-2 text-sm", i.severity === "error" ? "text-danger" : "text-warn")}>
+          {i.severity === "error" ? <CircleAlert className="mt-0.5 size-4 shrink-0" /> : <AlertTriangle className="mt-0.5 size-4 shrink-0" />}
+          {issueText(i, locale, activities)}
+        </li>
+      ))}
+    </ul>
   );
 }
 

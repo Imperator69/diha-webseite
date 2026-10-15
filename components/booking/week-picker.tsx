@@ -44,7 +44,17 @@ export function WeekPicker({
   const t = translator(locale);
   const enforceLead = !data.staff && !data.leadTimeOverride;
   const firstFree = zonedDate(data.nowMs + (enforceLead ? leadDays : 0) * 86_400_000);
-  const [weekStart, setWeekStart] = useState(startOfIsoWeek(periods.length ? zonedDate(periods[0].startsAt) : firstFree));
+  // erste Woche mit einem freien Zeitfenster (max. 12 Wochen voraus)
+  const firstFreeWeek = () => {
+    let week = startOfIsoWeek(firstFree);
+    for (let i = 0; i < 12; i++) {
+      const cells = weekAvailability({ weekStart: week, slots: data.slots, zones: data.zones, zoneIds, activityCodes, activities: data.activities, others: data.others, blocks: data.blocks, nowMs: data.nowMs, leadDays: enforceLead ? leadDays : 0 });
+      if (cells.some((c) => c.status === "free")) return week;
+      week = addDays(week, 7);
+    }
+    return startOfIsoWeek(firstFree);
+  };
+  const [weekStart, setWeekStart] = useState(() => (periods.length ? startOfIsoWeek(zonedDate(periods[0].startsAt)) : firstFreeWeek()));
   const [custom, setCustom] = useState({ from: "", fromTime: "08:00", to: "", toTime: "17:00" });
 
   const cells = useMemo(
@@ -102,7 +112,7 @@ export function WeekPicker({
           <Button type="button" variant="secondary" size="sm" onClick={() => setWeekStart(addDays(weekStart, 7))} aria-label={t("Nächste Woche", "Next week")}>
             <ChevronRight className="size-4" />
           </Button>
-          <Button type="button" variant="ghost" size="sm" onClick={() => setWeekStart(startOfIsoWeek(firstFree))}>
+          <Button type="button" variant="ghost" size="sm" onClick={() => setWeekStart(firstFreeWeek())}>
             {t("Erster möglicher Termin", "First possible date")}
           </Button>
         </div>

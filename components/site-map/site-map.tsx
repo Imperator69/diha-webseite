@@ -102,7 +102,8 @@ export function SiteMap({ zones, locale, baseImageUrl, selectable, selectedIds =
   const dark = tone === "dark";
 
   return (
-    <div className={clsx("grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]", className)}>
+    <div className={clsx("@container", className)}>
+      <div className="grid gap-4 @3xl:grid-cols-[minmax(0,1fr)_300px]">
       <div className={clsx("relative overflow-hidden rounded-2xl ring-1", dark ? "ring-white/10" : "ring-border")}>
         <svg
           ref={svgRef}
@@ -244,6 +245,7 @@ export function SiteMap({ zones, locale, baseImageUrl, selectable, selectedIds =
           </div>
         )}
       </aside>
+      </div>
     </div>
   );
 }
