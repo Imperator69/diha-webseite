@@ -3,7 +3,7 @@ import { audit } from "@/lib/audit";
 import { staffEmails } from "@/lib/bookings/data";
 import { db, schema } from "@/lib/db";
 import type { Locale } from "@/lib/i18n/config";
-import { formatDate, formatDateTime } from "@/lib/i18n/format";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/i18n/format";
 import { docKindLabels, label } from "@/lib/i18n/labels";
 import { sendMail } from "@/lib/mail/send";
 import { getSetting, putSetting } from "@/lib/settings";
@@ -13,7 +13,7 @@ import { addDays, zonedDate } from "@/lib/time";
 const DAY = 86_400_000;
 
 type Text = { de: string; en: string };
-export type DigestItem = { key: string; section: "permits" | "documents" | "bookings"; text: Text; path: string };
+export type DigestItem = { key: string; section: "permits" | "documents" | "bookings" | "invoices"; text: Text; path: string };
 
 export type JobReport = {
   ranAt: number;
@@ -28,6 +28,7 @@ const sectionTitle: Record<DigestItem["section"], Text> = {
   permits: { de: "Genehmigungen und Fristen", en: "Permits and deadlines" },
   documents: { de: "Ablaufende Unterlagen", en: "Expiring documents" },
   bookings: { de: "Buchungen mit Handlungsbedarf", en: "Bookings needing action" },
+  invoices: { de: "Überfällige Rechnungen", en: "Overdue invoices" },
 };
 
 /** Sammelt alle offenen Fristen. Schlüssel ändern sich, sobald sich die Frist ändert, damit erneut erinnert wird. */
@@ -106,13 +107,30 @@ export async function collectDigest(now: number): Promise<DigestItem[]> {
       path: `/portal/buchungen/${b.id}`,
     });
   }
+  const overdue = await db()
+    .select({ i: schema.invoices, projectName: schema.projects.name })
+    .from(schema.invoices)
+    .innerJoin(schema.projects, eq(schema.invoices.projectId, schema.projects.id))
+    .where(and(eq(schema.invoices.kind, "invoice"), inArray(schema.invoices.status, ["issued", "partially_paid"]), isNotNull(schema.invoices.dueDate), lt(schema.invoices.dueDate, today)));
+  for (const { i, projectName } of overdue) {
+    const open = i.grossCents - i.paidCents;
+    items.push({
+      key: `invoice-overdue:${i.id}:${i.dunningLevel}`,
+      section: "invoices",
+      text: {
+        de: `${i.number} · ${projectName} · offen ${formatMoney(open, "de")}, fällig seit ${d(i.dueDate!, "de")}${i.dunningLevel ? ` (Mahnstufe ${i.dunningLevel})` : ""}`,
+        en: `${i.number} · ${projectName} · open ${formatMoney(open, "en")}, due since ${d(i.dueDate!, "en")}${i.dunningLevel ? ` (reminder level ${i.dunningLevel})` : ""}`,
+      },
+      path: `/portal/rechnungen/${i.id}`,
+    });
+  }
   return items;
 }
 
 function digestText(locale: Locale, name: string, items: DigestItem[]): { subject: string; text: string } {
   const base = siteUrl();
   const parts: string[] = [];
-  for (const section of ["permits", "documents", "bookings"] as const) {
+  for (const section of ["permits", "documents", "bookings", "invoices"] as const) {
     const list = items.filter((i) => i.section === section);
     if (!list.length) continue;
     parts.push(`${sectionTitle[section][locale]}\n${list.map((i) => `- ${i.text[locale]}\n  ${base}/${locale}${i.path}`).join("\n")}`);

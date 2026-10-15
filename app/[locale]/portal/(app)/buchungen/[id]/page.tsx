@@ -27,7 +27,9 @@ import { localeParam, sp, type PageProps } from "@/lib/portal/params";
 import { evaluateBooking } from "@/lib/rules/engine";
 import { issueText } from "@/lib/rules/messages";
 import { nowMs, zonedDate } from "@/lib/time";
-import { inArray } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
+import { createInvoiceAction } from "@/lib/actions/invoices";
+import { getSetting } from "@/lib/settings";
 
 const statusActions: Record<string, { to: string; de: string; en: string; variant: "primary" | "secondary" | "danger"; needsMessage?: boolean }[]> = {
   requested: [
@@ -71,8 +73,14 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
   const allDocs = await loadAvailableDocs(booking.projectId, booking.id);
   const evaluation = evaluateBooking(
     { activityCodes: full.activityCodes, zoneIds: full.zoneIds, periods: full.periods, persons: full.persons, docs: allDocs, details: booking.details, participantsCount: booking.participantsCount, guestsCount: booking.guestsCount },
-    { activities: catalog.activities, zones: catalog.zones, ...occupancy, nowMs: nowMs(), enforceLeadTime: !staff && !booking.leadTimeOverride },
+    { activities: catalog.activities, zones: catalog.zones, ...occupancy, nowMs: nowMs(), enforceLeadTime: !staff && !booking.leadTimeOverride, guestThreshold: (await getSetting("booking")).guestThreshold },
   );
+  const invoices = (
+    await db()
+      .select({ id: schema.invoices.id, number: schema.invoices.number, kind: schema.invoices.kind, status: schema.invoices.status, grossCents: schema.invoices.grossCents })
+      .from(schema.invoices)
+      .where(eq(schema.invoices.bookingId, booking.id))
+  ).filter((i) => staff || i.status !== "draft");
   const docRows = allDocs.length
     ? await db()
         .select()
@@ -470,6 +478,32 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
               )}
             </CardBody>
           </Card>
+          {(invoices.length > 0 || (staff && ["confirmed", "completed", "invoiced"].includes(booking.status))) && (
+            <Card>
+              <CardHeader title={t("Rechnungen", "Invoices")} />
+              <CardBody className="space-y-2 text-sm">
+                {invoices.map((i) => (
+                  <p key={i.id} className="flex items-center justify-between gap-2">
+                    <a href={`/${locale}/portal/rechnungen/${i.id}`} className="font-medium hover:underline">
+                      {i.number ?? t("Entwurf", "Draft")}
+                      {i.kind === "credit_note" && ` (${t("Gutschrift", "credit note")})`}
+                    </a>
+                    <span className="tabular-nums">{formatMoney(i.grossCents, locale)}</span>
+                  </p>
+                ))}
+                {staff && !invoices.some((i) => i.kind === "invoice" && i.status !== "cancelled") && (
+                  <form action={createInvoiceAction}>
+                    <input type="hidden" name="locale" value={locale} />
+                    <input type="hidden" name="project_id" value={booking.projectId} />
+                    <input type="hidden" name="booking_id" value={booking.id} />
+                    <Button type="submit" size="sm" variant="secondary">
+                      {t("Rechnung erstellen", "Create invoice")}
+                    </Button>
+                  </form>
+                )}
+              </CardBody>
+            </Card>
+          )}
           {staff && full.project && (
             <Card>
               <CardHeader title={t("Projekt", "Project")} />

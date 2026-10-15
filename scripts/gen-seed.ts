@@ -35,8 +35,8 @@ for (const s of seedSlots) {
 }
 for (const r of seedRates) {
   lines.push(
-    `INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, sort_order) VALUES (${[
-      r.id, r.code, r.nameDe, r.nameEn, r.unit, 0, 2000, r.sortOrder,
+    `INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, activity_code, sort_order) VALUES (${[
+      r.id, r.code, r.nameDe, r.nameEn, r.unit, 0, 2000, "activityCode" in r ? r.activityCode : null, r.sortOrder,
     ].map(q).join(", ")});`,
   );
 }

@@ -20,6 +20,9 @@ const messages: Record<string, { de: string; en: string }> = {
   iban: { de: "Die IBAN ist ungültig (Prüfziffer).", en: "The IBAN is invalid (check digits)." },
   bic: { de: "Der BIC ist ungültig.", en: "The BIC is invalid." },
   vat_id: { de: "Die UID-Nummer hat kein gültiges Format.", en: "The VAT ID has an invalid format." },
+  overpaid: { de: "Der Betrag übersteigt den offenen Betrag.", en: "The amount exceeds the open balance." },
+  frozen: { de: "Ausgestellte Rechnungen können nicht mehr geändert werden. Bitte stornieren.", en: "Issued invoices cannot be changed. Please cancel instead." },
+  line: { de: "Bitte jede Position vollständig ausfüllen (Beschreibung, Menge > 0, Preis).", en: "Please complete every line (description, quantity > 0, price)." },
   server: { de: "Unerwarteter Fehler. Bitte erneut versuchen.", en: "Unexpected error. Please try again." },
 };
 

@@ -452,6 +452,10 @@ export type PartySnapshot = {
   vatId?: string | null;
   companyRegister?: string | null;
   email?: string | null;
+  phone?: string | null;
+  iban?: string | null;
+  bic?: string | null;
+  bank?: string | null;
 };
 
 export const invoices = sqliteTable(

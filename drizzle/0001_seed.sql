@@ -38,13 +38,13 @@ INSERT INTO slot_templates (id, zone_id, name_de, name_en, start_time, end_time,
 --> statement-breakpoint
 INSERT INTO slot_templates (id, zone_id, name_de, name_en, start_time, end_time, weekdays, sort_order) VALUES ('slot-sat', NULL, 'Samstag Vormittag', 'Saturday morning', '08:00', '12:00', '[6]', 3);
 --> statement-breakpoint
-INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, sort_order) VALUES ('rate-zone-halfday', 'zone_half_day', 'Geländenutzung je Zone, Halbtag', 'Site use per zone, half day', 'half_day', 0, 2000, 1);
+INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, activity_code, sort_order) VALUES ('rate-zone-halfday', 'zone_half_day', 'Geländenutzung je Zone, Halbtag', 'Site use per zone, half day', 'half_day', 0, 2000, NULL, 1);
 --> statement-breakpoint
-INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, sort_order) VALUES ('rate-workshop-month', 'workshop_month', 'Werkstatt-/Containermodul, Monat', 'Workshop/container module, month', 'month', 0, 2000, 2);
+INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, activity_code, sort_order) VALUES ('rate-workshop-month', 'workshop_month', 'Werkstatt-/Containermodul, Monat', 'Workshop/container module, month', 'month', 0, 2000, 'workshop', 2);
 --> statement-breakpoint
-INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, sort_order) VALUES ('rate-range-safety', 'range_safety', 'Range Safety / Sicherheitspersonal, Halbtag', 'Range safety staff, half day', 'half_day', 0, 2000, 3);
+INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, activity_code, sort_order) VALUES ('rate-range-safety', 'range_safety', 'Range Safety / Sicherheitspersonal, Halbtag', 'Range safety staff, half day', 'half_day', 0, 2000, NULL, 3);
 --> statement-breakpoint
-INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, sort_order) VALUES ('rate-energetics', 'energetics_surcharge', 'Zuschlag Wirkmittel-Testtag', 'Energetics test day surcharge', 'day', 0, 2000, 4);
+INSERT INTO rates (id, code, name_de, name_en, unit, price_cents, tax_rate_bp, activity_code, sort_order) VALUES ('rate-energetics', 'energetics_surcharge', 'Zuschlag Wirkmittel-Testtag', 'Energetics test day surcharge', 'day', 0, 2000, 'ground_energetics', 4);
 --> statement-breakpoint
 INSERT INTO settings (key, value) VALUES ('company', '{"name":"DIHA GmbH (in Gründung)","street":"tba","postalCode":"","city":"tba","country":"Österreich","vatId":"","companyRegister":"","court":"","email":"","phone":"","iban":"","bic":"","bank":""}');
 --> statement-breakpoint

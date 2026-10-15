@@ -139,6 +139,14 @@ export const invoiceStatusLabels: LabelMap = {
   cancelled: { de: "Storniert", en: "Cancelled" },
 };
 
+export const creditNoteStatusLabels: LabelMap = {
+  draft: { de: "Entwurf", en: "Draft" },
+  issued: { de: "Erstattung offen", en: "Refund open" },
+  partially_paid: { de: "Teilweise erstattet", en: "Partially refunded" },
+  paid: { de: "Ausgeglichen", en: "Settled" },
+  cancelled: { de: "Storniert", en: "Cancelled" },
+};
+
 export const paymentMethodLabels: LabelMap = {
   transfer: { de: "Überweisung", en: "Bank transfer" },
   cash: { de: "Bar", en: "Cash" },
