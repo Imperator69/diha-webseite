@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
+import { appEnv } from "@/lib/env";
 
 /**
  * Einfaches Fenster-Rate-Limit in D1. Liefert true, wenn die Aktion erlaubt ist.
@@ -20,9 +21,15 @@ export async function hit(key: string, limit: number, windowMs: number): Promise
   return true;
 }
 
+/**
+ * Prüfwert je Client: HMAC-SHA-256 über IP und Tag mit APP_SECRET. Ohne den Schlüssel lässt sich
+ * die IP nicht durch Durchprobieren zurückrechnen; der Wert wechselt täglich.
+ */
 export async function clientKey(prefix: string, headers: Headers): Promise<string> {
   const ip = headers.get("cf-connecting-ip") ?? headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
   const day = new Date().toISOString().slice(0, 10);
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${prefix}:${ip}:${day}`));
-  return `${prefix}:${Array.from(new Uint8Array(digest).slice(0, 12), (b) => b.toString(16).padStart(2, "0")).join("")}`;
+  const secret = appEnv().APP_SECRET || "dev-only";
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${prefix}:${ip}:${day}`));
+  return `${prefix}:${Array.from(new Uint8Array(mac).slice(0, 12), (b) => b.toString(16).padStart(2, "0")).join("")}`;
 }

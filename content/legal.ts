@@ -131,7 +131,7 @@ const privacyDe: LegalPage = {
       heading: "5. Kontaktformular",
       paragraphs: [
         "Wenn Sie uns über das Kontaktformular schreiben, verarbeiten wir Name, E-Mail-Adresse, optional Organisation und Telefonnummer, das gewählte Thema und Ihre Nachricht, um Ihre Anfrage zu beantworten.",
-        "Rechtsgrundlage sind vorvertragliche Maßnahmen bzw. unser berechtigtes Interesse an der Beantwortung von Anfragen (Art. 6 Abs. 1 lit. b und f DSGVO). Anfragen werden 12 Monate nach Eingang gelöscht, sofern daraus kein Vertragsverhältnis entsteht. Zur Missbrauchsabwehr speichern wir einen anonymisierten, täglich wechselnden Prüfwert statt Ihrer IP-Adresse.",
+        "Rechtsgrundlage sind vorvertragliche Maßnahmen bzw. unser berechtigtes Interesse an der Beantwortung von Anfragen (Art. 6 Abs. 1 lit. b und f DSGVO). Anfragen werden 12 Monate nach Eingang gelöscht, sofern daraus kein Vertragsverhältnis entsteht. Zur Missbrauchsabwehr speichern wir nicht Ihre IP-Adresse, sondern kurzzeitig einen mit einem geheimen Schlüssel gebildeten, täglich wechselnden Prüfwert; er wird mit dem täglichen Bereinigungslauf gelöscht.",
       ],
     },
     {
@@ -154,7 +154,7 @@ const privacyDe: LegalPage = {
     {
       heading: "8. Speicherdauer",
       paragraphs: [
-        "Kontodaten speichern wir bis zur Löschung des Zugangs. Buchungs- und Rechnungsdaten bewahren wir entsprechend den gesetzlichen Aufbewahrungspflichten auf (Bücher und Belege 7 Jahre nach § 132 BAO; für Aufzeichnungen über Sprengmittel gelten längere Fristen). Kontaktanfragen löschen wir nach 12 Monaten, Sitzungsdaten nach Ablauf.",
+        "Kontodaten speichern wir bis zur Löschung des Zugangs. Buchungs- und Rechnungsdaten bewahren wir entsprechend den gesetzlichen Aufbewahrungspflichten auf (Bücher und Belege 7 Jahre nach § 132 BAO; abweichende gesetzliche Fristen, etwa für sicherheitsrechtliche Aufzeichnungen, bleiben vorbehalten). Kontaktanfragen löschen wir nach 12 Monaten, Protokolle versandter Systemnachrichten nach 30 Tagen, Sitzungsdaten nach Ablauf.",
       ],
     },
     {
@@ -206,7 +206,7 @@ const privacyEn: LegalPage = {
       heading: "5. Contact form",
       paragraphs: [
         "If you write to us via the contact form, we process your name, email address, optionally organisation and phone number, the chosen topic and your message in order to respond.",
-        "The legal basis is pre-contractual measures or our legitimate interest in answering enquiries (Art. 6(1)(b) and (f) GDPR). Enquiries are deleted 12 months after receipt unless a contract results. For abuse prevention we store an anonymised check value that changes daily instead of your IP address.",
+        "The legal basis is pre-contractual measures or our legitimate interest in answering enquiries (Art. 6(1)(b) and (f) GDPR). Enquiries are deleted 12 months after receipt unless a contract results. For abuse prevention we do not store your IP address but, briefly, a check value derived with a secret key that changes daily; it is deleted by the daily clean-up run.",
       ],
     },
     {
@@ -229,7 +229,7 @@ const privacyEn: LegalPage = {
     {
       heading: "8. Retention",
       paragraphs: [
-        "Account data is kept until the account is deleted. Booking and invoice data are retained in line with statutory obligations (books and records 7 years under § 132 Austrian Federal Fiscal Code; longer periods apply to explosives records). Contact enquiries are deleted after 12 months, session data on expiry.",
+        "Account data is kept until the account is deleted. Booking and invoice data are retained in line with statutory obligations (books and records 7 years under § 132 Austrian Federal Fiscal Code; other statutory periods, e.g. for safety-related records, remain reserved). Contact enquiries are deleted after 12 months, logs of sent system messages after 30 days, session data on expiry.",
       ],
     },
     {
