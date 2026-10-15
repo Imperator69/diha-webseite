@@ -436,6 +436,8 @@ export const rates = sqliteTable("rates", {
   nameDe: text("name_de").notNull(),
   nameEn: text("name_en").notNull(),
   unit: text("unit", { enum: ["hour", "half_day", "day", "month", "flat", "person_day"] }).notNull(),
+  // Bezug: je Buchung, je gewählter Zone oder je teilnehmender Person
+  basis: text("basis", { enum: ["booking", "zone", "person"] }).notNull().default("booking"),
   priceCents: integer("price_cents").notNull().default(0),
   taxRateBp: integer("tax_rate_bp").notNull().default(2000),
   zoneId: text("zone_id").references(() => zones.id, { onDelete: "cascade" }),

@@ -471,7 +471,7 @@ export const seedSlots = [
 
 // Preise sind noch nicht festgelegt: 0 € bedeutet „auf Anfrage“.
 export const seedRates = [
-  { id: "rate-zone-halfday", code: "zone_half_day", nameDe: "Geländenutzung je Zone, Halbtag", nameEn: "Site use per zone, half day", unit: "half_day", sortOrder: 1 },
+  { id: "rate-zone-halfday", code: "zone_half_day", nameDe: "Geländenutzung je Zone, Halbtag", nameEn: "Site use per zone, half day", unit: "half_day", basis: "zone", sortOrder: 1 },
   { id: "rate-workshop-month", code: "workshop_month", nameDe: "Werkstatt-/Containermodul, Monat", nameEn: "Workshop/container module, month", unit: "month", sortOrder: 2 },
   { id: "rate-range-safety", code: "range_safety", nameDe: "Range Safety / Sicherheitspersonal, Halbtag", nameEn: "Range safety staff, half day", unit: "half_day", sortOrder: 3 },
   { id: "rate-energetics", code: "energetics_surcharge", nameDe: "Zuschlag Wirkmittel-Testtag", nameEn: "Energetics test day surcharge", unit: "day", sortOrder: 4 },

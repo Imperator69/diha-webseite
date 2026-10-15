@@ -48,3 +48,24 @@ export async function assertViewer(permission?: Permission): Promise<Viewer> {
 export function canAccessProject(viewer: Viewer, projectId: string): boolean {
   return isStaff(viewer.role) || viewer.projectIds.includes(projectId);
 }
+
+/** Für Route Handler: angemeldeter Benutzer mit erfüllter 2FA-Pflicht, sonst null. */
+export async function routeViewer(): Promise<Viewer | null> {
+  const current = await getViewer();
+  if (!current) return null;
+  const { viewer, session } = current;
+  if (viewer.totpEnabled && !session.mfaVerified) return null;
+  if (requiresMfa(viewer.role) && !viewer.totpEnabled) return null;
+  return viewer;
+}
+
+/** Same-Origin-Prüfung für zustandsändernde Route Handler (CSRF-Schutz zusätzlich zu SameSite-Cookies). */
+export function sameOrigin(request: Request): boolean {
+  const origin = request.headers.get("origin");
+  if (!origin) return false;
+  try {
+    return new URL(origin).host === new URL(request.url).host;
+  } catch {
+    return false;
+  }
+}
